@@ -300,10 +300,21 @@ select
 	where s.salarie_code = '317QMMBE-SAL') as mat_sal
 
 ============================================
+FAYE SH
+H9W2EQCJ
+
+===========================
 
 
-select typo_lib, * from typologies t where t.typo_groupe ='MODE DE PAIEMENT' 
-and (typo_description is null or typo_description ='' or typo_description ~~ '%BJ%' ) 
+select * from fiche_de_paie fdp where fdp.fdp_type_charge = 'PATRONALE' limit 1
 
 
-select * from pays p where p.pays_nom ~~ '%NIN%'
+select * from v_export_fiche
+
+
+
+
+
+
+
+
