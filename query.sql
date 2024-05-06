@@ -306,10 +306,24 @@ H9W2EQCJ
 ===========================
 
 
-select * from fiche_de_paie fdp where fdp.fdp_type_charge = 'PATRONALE' limit 1
 
 
-select * from v_export_fiche
+
+select * from sal_enfant se limit 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
