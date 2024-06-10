@@ -18,6 +18,9 @@ HAVING   COUNT(*) > 1 and ss.salarie_num_cnib  != ''
 select f_get_doublon('2191200700246')
 
 
+--// SET NEXT VAL 
+SELECT setval('prestataires_prest_id_seq', 124);
+
 
 -- // ===================================================== 
 --// UPDATE > PAYS ratacher  
@@ -121,9 +124,12 @@ WHERE 1=1
 
  =====================================
 -- TO SALARIE
+ CT-MW3UP
+974SRLUT-SAL
  
-select salarie_typologie,contrat_reference  ,* from salaries s where s.salarie_code in ('373BHSQV-SAL')
-select contrat_statut ,* from contrat c where contrat_reference = 'CT-4FASY'
+ 
+select salarie_typologie,contrat_reference  ,* from salaries s where s.salarie_code in ('974SRLUT-SAL')
+select contrat_statut ,* from contrat c where contrat_reference = 'CT-MW3UP'
 
 select distinct contrat_statut from contrat 
 
@@ -131,11 +137,11 @@ update contrat c
 set contrat_statut='CONTRAT EN COURS'
 where
 c.contrat_reference
- = 'CT-4FASY'
+ = 'CT-MW3UP'
 in (
 SELECT contrat_reference FROM umo.salaries WHERE 1=1
  AND salarie_code in (
-'395DQYUY-SAL'
+'974SRLUT-SAL'
  ) 
  --and salarie_client_code = '796TLYBC-CL'
 );
@@ -150,7 +156,7 @@ delete FROM umo.contrat_horaire WHERE salarie_code in ('462TQUUI-SAL',
 
 update salaries 
 set 
-	contrat_reference = 'CT-4FASY',
+	contrat_reference = 'CT-MW3UP',
  salarie_typologie ='SOUS CONTRAT'
  -- salarie_type_contrat = 'CONTRAT JOURNALIER',
  --salarie_date_embauche = '2024-03-18'::date,
@@ -159,21 +165,22 @@ set
 WHERE 1=1
  --AND salarie_typologie ='VIVIER'
  AND salarie_code in (
-'373BHSQV-SAL'
+'974SRLUT-SAL'
  ) 
  =====================================
 -- TO VIVIER 
+CT-XX03R 267EUJDO-SAL
  
 select salarie_typologie ,* from salaries s where s.salarie_code IN (
-'444SABQE-SAL')
+'837QQVMX-SAL')
 
-select distinct contrat_statut  from contrat
+select salarie_code from contrat where contrat_reference ='CT-S5NY1'
 
 
 update contrat c
 set contrat_statut='ANCIEN CONTRAT'
 where c.contrat_reference in (
-'JR-IG3IJ')
+'CT-XX03R')
 
 in (
 SELECT contrat_reference FROM umo.salaries WHERE 1=1
@@ -190,7 +197,7 @@ set
 WHERE 1=1
  --AND salarie_typologie ='VIVIER'
  AND salarie_code in (
-'528UDYKN-SAL'
+'267EUJDO-SAL'
  ) 
  
  delete from contrat where contrat_reference = 'CT-P9ATI'
@@ -279,13 +286,33 @@ select salarie_typologie , contrat_reference ,* from salaries where salarie_code
 select * from contrat where contrat_reference ='CT-KLE7W'
 
 --> change MATRICULE 
+
+
  
 select * from f__change_matricule(
 ARRAY[
-'563BOMRH-SAL'
+'747BSQIC-SAL',
+'955HYWAK-SAL',
+'331DKZXL-SAL',
+'617IFUQR-SAL',
+'253PFIMY-SAL',
+'636PJUVS-SAL',
+'436DNLUB-SAL',
+'948DXNJE-SAL',
+'524SJJID-SAL',
+'351LNLHS-SAL'
 ], 
 ARRAY[
-'CJSF001B'
+'RAST-J001',
+'RAST-J002',
+'RAST-J003',
+'RAST-J004',
+'RAST-J005',
+'RAST-J006',
+'RAST-J007',
+'RAST-J008',
+'RAST-J009',
+'RAST-J010'
 ]
 );
 
@@ -305,30 +332,19 @@ H9W2EQCJ
 
 ===========================
 
+call f_verifier_remboursements('283TBCQV-SAL')
+
+CALL umo.f_ipm_rembourssement(9);
+
+select * from f_ipm_get_montant(9)
 
 
 
-
-select * from sal_enfant se limit 1
-
+ALTER TABLE umo.ipm ADD reference varchar NULL;
 
 
 
+select * from pieces p where  piece_type='IPM'
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+piece_validee
 
