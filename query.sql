@@ -124,8 +124,7 @@ WHERE 1=1
 
  =====================================
 -- TO SALARIE
- CT-MW3UP
-974SRLUT-SAL
+538GFNCF-SAL CT-NCR2A
  
  
 select salarie_typologie,contrat_reference  ,* from salaries s where s.salarie_code in ('974SRLUT-SAL')
@@ -137,7 +136,7 @@ update contrat c
 set contrat_statut='CONTRAT EN COURS'
 where
 c.contrat_reference
- = 'CT-MW3UP'
+ = 'CT-NCR2A'
 in (
 SELECT contrat_reference FROM umo.salaries WHERE 1=1
  AND salarie_code in (
@@ -165,14 +164,14 @@ set
 WHERE 1=1
  --AND salarie_typologie ='VIVIER'
  AND salarie_code in (
-'974SRLUT-SAL'
+'538GFNCF-SAL'
  ) 
  =====================================
 -- TO VIVIER 
 CT-XX03R 267EUJDO-SAL
  
-select salarie_typologie ,* from salaries s where s.salarie_code IN (
-'837QQVMX-SAL')
+select salarie_typologie,soc_code ,* from salaries s where s.salarie_code IN (
+'538GFNCF-SAL')
 
 select salarie_code from contrat where contrat_reference ='CT-S5NY1'
 
@@ -205,37 +204,39 @@ WHERE 1=1
  =====================================
  >> change SOCIETE
 
- SELECT s.salarie_soc_code, soc_code ,contrat_reference  ,* FROM salaries s where s.salarie_code = '754ALLRE-SAL'
- CT-QMHEL 754ALLRE-SAL 
- 
- select * from societe s where s.soc_raison_soc ~~ '%UMO%'
+>> SG_UMO_7
+538GFNCF-SAL 
+CT-NCR2A
+
+ select * from societe s where s.soc_raison_soc ~~ '%SPI%'
  
  update contrat c 
 set 
- soc_code = 'SG_UMO_9'
+ soc_code = 'SG_UMO_7'
 where c.contrat_reference in (
 SELECT contrat_reference FROM umo.salaries WHERE 1=1
  AND salarie_code in (
-'265QKSFR-SAL'
+'538GFNCF-SAL'
  ) 
  --and salarie_client_code = '796TLYBC-CL'
 );
  
 update salaries 
 set 
- soc_code = 'SG_UMO_16'
+ soc_code = 'SG_UMO_7'
 WHERE 1=1
  AND salarie_code in (
-'754ALLRE-SAL'
+'538GFNCF-SAL'
  ) 
  
  =====================================
 >> change CLIENT 
 
-NEEMBA MALI SASU
-CT-5VFVM 652ZIGCR-SAL MA231 
+AFRICA FORWARDING SERVICES
+538GFNCF-SAL 
+CT-NCR2A
 
-select * from clients c where upper(c.client_raison_soc)  ~~ '%NEEMBA%' > 173WKENN-CL  -  NEEMBA MALI SASU
+select * from clients c where upper(c.client_raison_soc)  ~~ '%FORWARDING%' > 567CVWKD-CL  -  AFRICA FORWARDING SERVICES 
 
 select salarie_typologie ,salarie_client_code,salarie_client, salarie_soc_code, salarie_soc_nom  from salaries s where s.salarie_code ='758OMJKV-SAL'
 
@@ -244,24 +245,24 @@ select client_code from contrat c2 where c2.contrat_reference = 'CT-QMHEL'
  
  update contrat c 
 set 
-client_code = '173WKENN-CL'
+client_code = '567CVWKD-CL'
 where c.contrat_reference in (
 SELECT contrat_reference FROM umo.salaries WHERE 1=1
  AND salarie_code in (
-'652ZIGCR-SAL'
+'538GFNCF-SAL'
  ) 
  --and salarie_client_code = '796TLYBC-CL'
 );
  
 update salaries 
 set 
- salarie_client_code = '173WKENN-CL',
- salarie_client = '173WKENN-CL',
- salarie_soc_code = '173WKENN-CL',
- salarie_soc_nom = 'NEEMBA MALI SASU'
+ salarie_client_code = '567CVWKD-CL',
+ salarie_client = '567CVWKD-CL',
+ salarie_soc_code = '567CVWKD-CL',
+ salarie_soc_nom = 'AFRICA FORWARDING SERVICES'
 WHERE 1=1
  AND salarie_code in (
-'652ZIGCR-SAL'
+'538GFNCF-SAL'
  ) 
  --and salarie_client_code = '796TLYBC-CL'
  
@@ -326,25 +327,82 @@ select
 (select s.salarie_matricule  from salaries s
 	where s.salarie_code = '317QMMBE-SAL') as mat_sal
 
+	
 ============================================
-FAYE SH
-H9W2EQCJ
 
-===========================
+drop table umo.facture_ipm_prestataire;
 
-call f_verifier_remboursements('283TBCQV-SAL')
+CREATE TABLE umo.facture_ipm_prestataire (
+	fact_ipm_prest_id serial4 not NULL,
+	fact_ipm_prest_num varchar not NULL,
+	fact_ipm_prest_date date null,
+	fact_ipm_prest_periode varchar NULL,
+	fact_ipm_prest_code varchar not null,
+	fact_ipm_prest_montant_ht numeric null,
+	fact_ipm_prest_tva numeric null,
+	fact_ipm_prest_ttc numeric null,
+	fact_ipm_prest_nb_objet numeric null,
+	fact_ipm_prest_totalise numeric null,
+	fact_ipm_prest_valide bool null,
+	fact_ipm_prest_date_valide timestamp null,
+	CONSTRAINT fact_ipm_prest_num_pk PRIMARY KEY (fact_ipm_prest_num)
+);
 
-CALL umo.f_ipm_rembourssement(9);
 
-select * from f_ipm_get_montant(9)
+drop table facture_ipm_prest_details;
+
+CREATE TABLE umo.facture_ipm_prest_details (
+	fact_ipm_prest_det_id serial4 not NULL,
+	fact_ipm_prest_det_code varchar NULL,
+	fact_ipm_prest_date date null,
+	fact_ipm_prest_num varchar not null,
+	fact_ipm_prest_matricule varchar NULL,
+	fact_ipm_prest_code varchar NULL,
+	fact_ipm_prest_nom_prenom varchar NULL,
+	fact_ipm_prest_profession varchar NULL,
+	fact_ipm_prest_benef_type varchar null,
+	fact_ipm_prest_benef_nom varchar null,
+	fact_ipm_prest_soc_code varchar NULL,
+	fact_ipm_prest_soc_nom varchar NULL,
+	fact_ipm_prest_cli_code varchar NULL,
+	fact_ipm_prest_cli_nom varchar NULL,
+	fact_ipm_prest_contrat_ref varchar NULL,
+	fact_ipm_prest_prestation varchar NULL,
+	fact_ipm_prest_pu numeric NULL,
+	fact_ipm_prest_nombre numeric NULL,
+	fact_ipm_prest_montant numeric NULL,
+	fact_ipm_prest_valide bool null,
+	fact_ipm_prest_date_valide timestamp null,
+	fact_ipm_prest_valide_par varchar null,
+	CONSTRAINT facture_ipm_details_pk PRIMARY KEY (fact_ipm_prest_det_id)
+	--,CONSTRAINT FOREIGN KEY (fact_ipm_prest_num) REFERENCES umo.facture_ipm_prestataire(fact_ipm_prest_num) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+ALTER TABLE umo.prestataires ADD prest_code_unique varchar NULL;
+update prestataires set prest_code_unique =concat(left(prest_specialiste, 3), prest_id)
+ALTER TABLE umo.prestataires ADD prest_code_unique varchar NOT NULL;
+
+
+====================================
+
+
+SELECT 
+s.salarie_matricule,
+concat(s.salarie_nom, ' ', s.salarie_prenom) as salarie_fullname,
+(select c.contrat_emploi from contrat c where c.contrat_reference = s.contrat_reference),
+s.soc_code,
+s.salarie_client_code,
+s.contrat_reference ,
+(select c.client_raison_soc from clients c where c.client_code = s.salarie_client_code),
+(select sc.soc_raison_soc from societe sc where sc.soc_code = s.soc_code),
+s.salarie_code ,
+i.*
+FROM umo.ipm i, umo.salaries s where s.salarie_code = i.salarie_code and i.reference = '537KDUNB-24-0001'
+
+
+select * from ipm i where  i.reference = '537KDUNB-24-0001';
 
 
 
-ALTER TABLE umo.ipm ADD reference varchar NULL;
 
-
-
-select * from pieces p where  piece_type='IPM'
-
-piece_validee
-
+salarie_matricule;salarie_fullname;contrat_emploi;soc_code;salarie_client_code;contrat_reference;client_raison_soc;soc_raison_soc
